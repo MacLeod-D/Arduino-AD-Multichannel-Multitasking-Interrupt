@@ -54,8 +54,7 @@
   <h3>Example-HEART-BEAT</h3>
  Here is an example of a HEART-BEAT-Sensor. 
  
- \image html Demo.jpg
- \image latex Demo.jpg
+ ![Demo](./Demo.jpg?raw=true "Demo HEAART-BEAT")
 
  Blue - original 
  
@@ -83,6 +82,7 @@
  
  There is plenty of room to do other things in LOOP !
  
+ ![Timing](./Timing.jpg?raw=true "Timing")
 
  
  @author Helmut Weber
