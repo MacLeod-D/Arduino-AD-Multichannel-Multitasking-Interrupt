@@ -15,29 +15,38 @@
  ChibiOS and derivatives are running on the Arduino UNO.<br>
  But sometimes a TickTime of 1 ms is too long.<br>
  
+ The goal is:
+ Measuring AD values at 3 channels (or more) as fast as possible and print them ready for Arduino-Plotter.
+ 3 Channels mean: Free running is not possible because we have to change the channels.
+ 
+ As an example a HEART-BEAT sensor is used.The data line is connected to A0, A1, A2 - but 3 different <br>
+ AD-Sources could be used.
+ 
+ The 3 lines are filtered because they are noisy. Different filter factors are used.
+ 
   <h3>Interrupts</h3>
  Here I show another approach using Interrupts.
  Three curves are red from the AD-converter using AD-Interrupt-Conversion-Ready<br>
- About 6000 conversions per second are done.<br>
- The red values are filtered an may be displayed using "Serial Plotter"<br>
+ Up to 6000 conversions per second are done.<br>
+ The values are filtered and may be displayed using "Serial Plotter"<br>
  
   <h3>Multitasking</h3>
  Besides "loop" 2 tasks are running in the backgrund"<br>
- One of them precisly ever 1 ms !
+ One of them every 1 ms, the other more often but with more jitter !
  
  
   <h3>Filter</h3>
- AD-Values for CHNUM channel are read using AD-Ready-Interrupts.
- One Channel after the other is read starting with channel 0 again.
+ AD-Values for CHNUM channels are red using AD-Ready-Interrupts.
+ One Channel after the other is red starting with channel 0 again.
  
  This is done in the background without any intervention of the LOOP
  
  The values are averaged for IRQ_SAMPLES  samples
  
  This is the code for averaging:
-    > avv=(float)analogVal;    <br>
-    > av[Channel] = (Alpha[Channel]*oldVal[Channel]) + ((1-Alpha[Channel])*avv);    <br>
-    > oldVal[Channel]=av[Channel];    <br>
+    > avv=(float)analogVal;    
+    > av[Channel] = (Alpha[Channel]*oldVal[Channel]) + ((1-Alpha[Channel])*avv);    
+    > oldVal[Channel]=av[Channel];    
  
  The sense is to get most samples possible, build an average over IRQ_SAMPLES value 
  and set the IrqReadyFlag.
@@ -66,19 +75,15 @@
  
  Filtereing implies a phase shift !
  
-  <h3>
- Timing
- </h3>
- \image html Timing.jpg
- \image latex Timing.jpg
+  <h3>Timing</h3>
  
- We get about 6000 (filtered) samples per second - 2000 per channel 
+ We get about **5500 (filtered) samples per second**.
  
  - with 10 IRQ_SAMPLES there are 200 Time Points per second (180 with Serial.print)
  
  Enough to show the details of HEART-BEAT
  
- The output in LOOP needs 1,6 ms every 5,6 ms for a Time Point. 
+ 3 Channels with 10 samples = 30 samples in 5,4 ms for a Time Point. 
  
  There is plenty of room to do other things in LOOP !
  
